@@ -24,26 +24,36 @@ export default function RSVPForm() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/rsvp", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: userName.trim(),
-          attending: attendance,
-          wishing: "",
-        }),
-      });
+      const TELEGRAM_BOT_TOKEN =
+        "8856386420:AAH-PCqOcQbEc4RhCqTEy8AkhOrc0lOg8Vk";
 
-      const data = await res.json();
-      if (res.ok) {
-        setSuccess(true);
-      } else {
-        setError(data.error || "Жауапты жіберу сәтсіз аяқталды");
-      }
+      const TELEGRAM_CHAT_ID = "1096094067";
+
+      const message = `
+🎉 Жаңа жауап (Кенжегүл анамыздың мерейтойы)
+
+👤 Қонақ: ${userName.trim()}
+📌 Жауабы: ${attendance}
+⏰ Уақыты: ${new Date().toLocaleString("kk-KZ")}
+  `.trim();
+
+      await fetch(
+        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: message,
+          }),
+        }
+      );
+
+      setSuccess(true);
     } catch (err) {
-      setError("Желілік қосылым қатесі, қайта жіберіп көріңіз");
+      setError("Telegram-ға жіберу кезінде қате пайда болды");
     } finally {
       setLoading(false);
     }
@@ -117,11 +127,10 @@ export default function RSVPForm() {
             {options.map((opt) => (
               <label
                 key={opt}
-                className={`flex items-center gap-3 p-3.5 rounded-xl border transition-all duration-300 cursor-pointer ${
-                  attendance === opt
+                className={`flex items-center gap-3 p-3.5 rounded-xl border transition-all duration-300 cursor-pointer ${attendance === opt
                     ? "bg-white border-amber-600 shadow-sm"
                     : "bg-white/40 border-amber-900/5 hover:border-amber-300"
-                }`}
+                  }`}
               >
                 <input
                   type="radio"
