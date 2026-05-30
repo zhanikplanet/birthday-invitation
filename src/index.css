@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Great+Vibes&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", "Playfair Display", serif;
+  --font-sans: "Montserrat", system-ui, sans-serif;
+  --font-display: "Playfair Display", serif;
+  --font-cursive: "Great Vibes", cursive;
+}
+
+/* Elegant gold/champagne gradients & text animations */
+.glow-gold {
+  box-shadow: 0 4px 20px rgba(180, 83, 9, 0.12);
+}
+
+.text-gold-gradient {
+  background: linear-gradient(135deg, #78350f 0%, #b45309 30%, #d97706 50%, #b45309 70%, #78350f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-gold-gradient {
+  background: linear-gradient(135deg, #b45309 0%, #d97706 50%, #78350f 100%);
+}
+
+.bg-champagne-gradient {
+  background: linear-gradient(to bottom, #fdf8ef 0%, #ffffff 50%, #f6edd9 100%);
+}
+
+/* Beautiful custom animations for interactive card opening */
+@keyframes envelopeOpen {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.08); opacity: 0; pointer-events: none; }
+}
+
+@keyframes contentReveal {
+  0% { transform: translateY(30px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes subtlePulse {
+  0%, 100% { transform: scale(1); opacity: 0.95; }
+  50% { transform: scale(1.03); opacity: 1; }
+}
+
+.animate-cover-fade {
+  animation: envelopeOpen 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-content-reveal {
+  animation: contentReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-subtle-pulse {
+  animation: subtlePulse 3s ease-in-out infinite;
+}
+
+/* Custom fade scroll snap points (aesthetic single-slide columns for mobile) */
+@layer utilities {
+  .snap-y-mandatory {
+    scroll-snap-type: y mandatory;
+  }
+  .snap-start {
+    scroll-snap-align: start;
+  }
+}
+
+/* Keyframes for soft floaters */
+@keyframes delicateFloat {
+  0% {
+    transform: translateY(0px) rotate(0deg) scale(1);
+    opacity: 0.15;
+  }
+  50% {
+    transform: translateY(-80px) rotate(180deg) scale(1.15);
+    opacity: 0.35;
+  }
+  100% {
+    transform: translateY(-160px) rotate(360deg) scale(1);
+    opacity: 0;
+  }
+}
+
+.petal-floating {
+  animation: delicateFloat 8s infinite linear;
+}
+
+/* Background image patterns */
+.parchment-pattern {
+  background-color: #faf6ee;
+  background-image: radial-gradient(rgba(180, 83, 9, 0.03) 1px, transparent 0),
+                    radial-gradient(rgba(180, 83, 9, 0.03) 1px, transparent 0);
+  background-size: 24px 24px;
+  background-position: 0 0, 12px 12px;
+}
+
+/* Beautiful custom elegant scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #fdfbf7;
+}
+::-webkit-scrollbar-thumb {
+  background: #e6dfcf;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #d4cbb8;
+}

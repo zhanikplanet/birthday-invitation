@@ -1,0 +1,6 @@
+{
+  "name": "Kenzhegul 55 Birthday Invitation",
+  "description": "Кенжегүлдің 55 жасқа толуына арналған мерейтойлық респонсивті шақыру билеті және тілектер бұрышы",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
