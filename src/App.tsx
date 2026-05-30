@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MapPin, ChevronDown, Heart } from "lucide-react";
 import MusicPlayer from "./components/MusicPlayer";
 import CalendarCard from "./components/CalendarCard";
@@ -7,105 +7,46 @@ import ScrollReveal from "./components/ScrollReveal";
 import { playAmbientMusic } from "./audio";
 
 export default function App() {
-  const [wishText, setWishText] = useState("");
-  const [isOpened, setIsOpened] = useState(false);
-  const [isFading, setIsFading] = useState(false);
   const [musicPlaying, setMusicPlaying] = useState(false);
 
-  // Handles clicking "Открыть приглашение"
-  const handleOpenInvitation = () => {
-    setIsFading(true);
-    // Bypasses browser autoplay restrictions via explicit user click trigger
-    try {
-      playAmbientMusic();
-      setMusicPlaying(true);
-    } catch (e) {
-      console.warn("Audio Context launch failed:", e);
-    }
+  useEffect(() => {
+    // Elegant automatic playback strategy
+    const startMusic = () => {
+      try {
+        playAmbientMusic();
+        setMusicPlaying(true);
+        // Remove listeners once playback starts successfully
+        window.removeEventListener("click", startMusic);
+        window.removeEventListener("touchstart", startMusic);
+        window.removeEventListener("scroll", startMusic);
+        window.removeEventListener("keydown", startMusic);
+      } catch (e) {
+        console.warn("Autoplay was prevented by browser, waiting for user interaction.", e);
+      }
+    };
 
-    // Delay setting isOpened so that fade-out animation plays cleanly
-    setTimeout(() => {
-      setIsOpened(true);
-    }, 750);
-  };
+    // Try immediate execution
+    startMusic();
+
+    // Fallback events: play automatically when user clicks, touches, scrolls, or presses any key
+    window.addEventListener("click", startMusic);
+    window.addEventListener("touchstart", startMusic);
+    window.addEventListener("scroll", startMusic, { passive: true });
+    window.addEventListener("keydown", startMusic);
+
+    return () => {
+      window.removeEventListener("click", startMusic);
+      window.removeEventListener("touchstart", startMusic);
+      window.removeEventListener("scroll", startMusic);
+      window.removeEventListener("keydown", startMusic);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#FDFBF7] parchment-pattern relative overflow-x-hidden text-[#5C4D3C] flex flex-col">
       
-      {/* 1. INITIAL COVER GREETING CARD (EPIC LUXURY ENVELOPE) */}
-      {!isOpened && (
-        <div
-          className={`fixed inset-0 z-[999] flex flex-col items-center justify-between bg-[#4a1216] transition-all duration-700 ease-out py-12 md:py-16 ${
-            isFading ? "opacity-0 scale-105 pointer-events-none" : "opacity-100 scale-100"
-          }`}
-        >
-          {/* Envelope geometric flaps (CSS polygons) mimicking actual visual depth of three-dimensional envelope folds */}
-          <div className="absolute inset-0 pointer-events-none select-none z-0">
-            {/* Left flap */}
-            <div className="absolute inset-y-0 left-0 w-1/2 bg-[#3c0e11] origin-left" style={{ clipPath: "polygon(0% 0%, 100% 50%, 0% 100%)", opacity: 0.95 }} />
-            {/* Right flap */}
-            <div className="absolute inset-y-0 right-0 w-1/2 bg-[#3c0e11] origin-right" style={{ clipPath: "polygon(100% 0%, 0% 50%, 100% 100%)", opacity: 0.95 }} />
-            {/* Bottom flap */}
-            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-[#2d090c]" style={{ clipPath: "polygon(0% 100%, 50% 0%, 100% 100%)", opacity: 0.98 }} />
-            {/* Top flap */}
-            <div className="absolute inset-x-0 top-0 h-1/2 bg-[#52161b] shadow-xl" style={{ clipPath: "polygon(0% 0%, 50% 50%, 100% 0%)", opacity: 0.92 }} />
-          </div>
-
-          {/* Top text content - Elegant Cursive and spacing */}
-          <div className="relative z-10 flex flex-col items-center text-center max-w-sm px-6">
-            <span className="font-cursive text-[#fcf9f2] text-4xl sm:text-5xl md:text-6xl tracking-wide filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]">
-              Сіз шақыру алдыңыз.
-            </span>
-            <span className="font-sans font-bold text-[#e1c58d]/90 text-[11px] sm:text-xs md:text-sm tracking-[0.3em] uppercase mt-4 block filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
-              МЕРЕЙТОЙҒА ШАҚЫРУ
-            </span>
-          </div>
-
-          {/* Centered Golden Wax Seal stamp (Interactive button) */}
-          <div className="relative z-10 my-auto flex flex-col items-center justify-center">
-            <button
-              onClick={handleOpenInvitation}
-              type="button"
-              className="relative w-28 h-28 rounded-full flex items-center justify-center cursor-pointer transition-all duration-500 hover:scale-110 active:scale-95 shadow-2xl focus:outline-none select-none group"
-              style={{
-                background: "radial-gradient(circle, #f0dca2 0%, #cba760 50%, #9e7934 100%)",
-                borderRadius: "53% 47% 49% 51% / 46% 52% 48% 54%",
-                boxShadow: "0 10px 30px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.4), inset 0 -2px 6px rgba(0,0,0,0.4)"
-              }}
-              aria-label="Открыть приглашение"
-            >
-              {/* Outer double gold circular accent ring with rotating motion on hover */}
-              <div className="absolute inset-2 rounded-full border border-[#71531a]/40 group-hover:rotate-12 transition-transform duration-700 pointer-events-none" />
-              <div className="absolute inset-[10px] rounded-full border border-[#8f6e2c]/35 group-hover:-rotate-12 transition-transform duration-700 pointer-events-none" />
-
-              {/* Textured wax center core stamp */}
-              <div 
-                className="absolute inset-4 rounded-full flex items-center justify-center pointer-events-none"
-                style={{
-                  background: "radial-gradient(circle, #ebd296 0%, #bf9b54 100%)",
-                  border: "2px double #866120",
-                  boxShadow: "inset 0 2px 5px rgba(0,0,0,0.25)"
-                }}
-              >
-                <span className="font-serif font-black text-amber-950 text-xs sm:text-sm tracking-[0.2em] uppercase select-none drop-shadow-[0_1px_1px_rgba(255,255,255,0.25)]">
-                  АШУ
-                </span>
-              </div>
-            </button>
-          </div>
-
-          {/* Bottom text invitation call to action */}
-          <div className="relative z-10 text-center max-w-sm px-6">
-            <p className="font-sans text-[#dfd4bd]/80 text-[10px] sm:text-xs tracking-wider uppercase leading-relaxed max-w-xs mx-auto drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
-              Шақыруды ашу үшін «АШУ»<br />батырмасын басыңыз.
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* 2. MAIN INVITATION SITE CONTENT */}
-      {/* Keep wrapper fully active so search or indexing can handle seamlessly, revealed beautifully */}
-      <div className={`transition-opacity duration-1000 ${isOpened ? "opacity-100" : "opacity-0"}`}>
+      {/* MAIN INVITATION SITE CONTENT */}
+      <div className="opacity-100 transition-opacity duration-1000">
         
         {/* Floating Background Sparkles */}
         <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
@@ -268,7 +209,7 @@ export default function App() {
           {/* Section 5: Beautiful RSVP Form without AI Wizard */}
           <ScrollReveal>
             <section id="rsvp-section" className="scroll-mt-12 max-w-2xl mx-auto w-full">
-              <RSVPForm wishText={wishText} onWishChange={setWishText} />
+              <RSVPForm />
             </section>
           </ScrollReveal>
 

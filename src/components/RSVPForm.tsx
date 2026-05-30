@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import { Send, CheckCircle, AlertCircle, Heart } from "lucide-react";
 
-interface RSVPFormProps {
-  wishText: string;
-  onWishChange: (text: string) => void;
-}
-
-export default function RSVPForm({ wishText, onWishChange }: RSVPFormProps) {
+export default function RSVPForm() {
   const [userName, setUserName] = useState("");
   const [attendance, setAttendance] = useState("Әрине, келемін");
   const [loading, setLoading] = useState(false);
@@ -37,7 +32,7 @@ export default function RSVPForm({ wishText, onWishChange }: RSVPFormProps) {
         body: JSON.stringify({
           name: userName.trim(),
           attending: attendance,
-          wishing: wishText.trim(),
+          wishing: "",
         }),
       });
 
@@ -62,13 +57,12 @@ export default function RSVPForm({ wishText, onWishChange }: RSVPFormProps) {
           Жауабыңыз жіберілді!
         </h4>
         <p className="text-xs sm:text-sm text-[#465A4C] leading-relaxed max-w-sm mb-6">
-          Ақ тілегіңізге және берген жауабыңызға үлкен рақмет! Кенжегүл анамыздың мерейтойында сізді асыға күтеміз! 🌟
+          Берген жауабыңызға үлкен рақмет! Кенжегүл анамыздың мерейтойында сізді асыға күтеміз! 🌟
         </p>
         <button
           onClick={() => {
             setSuccess(false);
             setUserName("");
-            onWishChange("");
           }}
           className="px-6 py-2.5 rounded-xl border border-emerald-300 font-sans text-xs font-semibold text-emerald-800 hover:bg-emerald-100/50 transition-colors cursor-pointer"
         >
@@ -142,23 +136,6 @@ export default function RSVPForm({ wishText, onWishChange }: RSVPFormProps) {
               </label>
             ))}
           </div>
-        </div>
-
-        {/* Wishes text area */}
-        <div>
-          <div className="flex justify-between items-center mb-2">
-            <label className="text-xs font-semibold text-amber-900/70 uppercase tracking-widest font-sans">
-              Құттықтау немесе ақ тілегіңіз:
-            </label>
-            <span className="text-[10px] text-amber-800/40">міндетті емес</span>
-          </div>
-          <textarea
-            rows={5}
-            className="w-full px-4 py-3 bg-white text-[#4A3B2C] placeholder-[#C0B5A3] text-sm rounded-xl border border-amber-900/10 focus:outline-none focus:ring-1 focus:ring-amber-500 font-medium transition-all resize-none font-serif italic"
-            placeholder="Осы жерге құттықтау сөзіңіз бен ақ тілегіңізді жазыңыз..."
-            value={wishText}
-            onChange={(e) => onWishChange(e.target.value)}
-          />
         </div>
 
         {error && (
