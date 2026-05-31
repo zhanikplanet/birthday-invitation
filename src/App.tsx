@@ -141,7 +141,7 @@ export default function App() {
                 </p>
                 
                 <p className="not-italic font-sans text-xs sm:text-sm text-amber-950 font-medium tracking-wide uppercase px-4 py-2 bg-[#FAF6EE] rounded-xl border border-amber-950/5 my-2">
-                  Аяулы анамыз, ардақты жар және асыл әпкеміз КЕНЖЕГҮЛДІҢ өмірінің мерейлі белесі – 55 жас мерейтойына арналған салтанатты кешімізге шақырамыз!
+                  Аяулы анамыз және асыл әпкеміз КЕНЖЕГҮЛДІҢ өмірінің мерейлі белесі – 55 жас мерейтойына арналған салтанатты кешімізге шақырамыз!
                 </p>
 
                 <p className="text-[#6B5A47]">
